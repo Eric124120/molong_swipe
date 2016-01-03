@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>图片查看器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <link rel="stylesheet" href="css/molong.css">
+    <style>
+        .delete-image{
+            position: absolute;
+            right: 10px;
+            top:10px;
+            background-image: url(imges/error.gif);
+            height: 20px;
+            width: 20px;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+<ul id="imgList" class="molong-img-list">
+    <li big-url="imges/1.jpg"><span class="delete-image"></span><div class='img-min' style="background-image:url(imges/1.jpg);"></div></li>
+    <li big-url="imges/2.jpg"><span class="delete-image"></span><div class='img-min' style="background-image:url(imges/2.jpg);"></div></li>
+    <li big-url="imges/3.jpg"><span class="delete-image"></span><div class='img-min' style="background-image:url(imges/3.jpg);"></div></li>
+</ul>
+<ul style="position: absolute;bottom:30px;left:0;z-index: 9999999;">
+    <li><input style="height: 40px;width: 90px;text-align: center;"  type="button" value="addImg" id="addBtn"/></li>
+    <li style="margin-top: 30px;"><input style="height: 40px;width: 90px;text-align: center;" type="button" value="closeImg" id="addClose"/></li>
+</ul>
+<script src="js/zepto.min.js"></script>
+<script src="js/touch.min.js"></script>
+<script src="js/molong.js"></script>
+<script>
+   $(function(){
+       //添加大图容器
+       var screenHeight=window.innerHeight;
+       var screenWidth=window.innerWidth;
+       var minImageWidth=screenWidth*0.25;//显示小图的宽高
+       var mySwipe=new molong.photoSwipe({listContainer:$("#imgList")});
+       mySwipe.init();
+       //关闭图片查看器
+       $("#addClose").on("touchend",function(){
+           mySwipe.hideBigImg();
+       });
+       $("#addBtn").on("click",function(){
+           console.log(this);
+           var addImg1='<li big-url="imges/4.jpg"><span class="delete-image"></span><div class="img-min" style="background-image:url(imges/4.jpg);"></div></li>';
+           mySwipe.listContainer.append(addImg1);
+           mySwipe.listContainer.find(".img-min").width(minImageWidth);
+           mySwipe.listContainer.find(".img-min").height(minImageWidth);
+       })
+       //显示大图监听
+       mySwipe.listen("listenShow",function(){
+           console.log("打开大图");
+       });
+       //关闭大图监听
+       mySwipe.listen("listenHide",function(){
+           console.log("关闭大图");
+       });
+       //删除图片
+       $("#imgList").on("touchstart",".delete-image",function(){
+           $(this).parent().remove();
+       });
+   });
+</script>
+</body>
+</html>
